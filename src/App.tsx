@@ -1,24 +1,27 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Button from '@mui/material/Button';
+import {TasksType, TodoList} from "./Components/todoList/TodoList";
+
+let task:Array<TasksType> = [
+    {id:1, title:"js", isDone: false},
+    {id:2, title:"php", isDone: true},
+    {id:3, title:"css", isDone: false}
+]
+
+let task2:Array<TasksType> = [
+    {id:1, title:"html", isDone: true},
+    {id:1, title:"git", isDone: true},
+    {id:1, title:"web socket", isDone: true}
+]
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+       <TodoList title={"list 1"} tasks={task}/>
+       <TodoList title={"list 2"} tasks={task2}/>
+
     </div>
   );
 }
