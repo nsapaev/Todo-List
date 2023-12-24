@@ -16,5 +16,16 @@
     display: inline-block;
 }
 .todoList__title{
+}
 
+.todoList__inputTitle{
+    border: 2px solid red;
+    display :inline-block;
+}
+.errorMessage{
+    color:red;
+}
+Button.btn{
+    color:red;
+    background: green;
 }
