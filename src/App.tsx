@@ -21,22 +21,15 @@ function App() {
                 {id: v1(), title: "Egg", isDone: false},]},
     ])
 
-    console.log(todoLists)
-
-
-
-    // создаём локальный стейт хранивший изменяемое свойство фильтрации
-    let [filter, setFilter] = useState("all ")
 
 
     // функция говорит какая кнопка фильтрации была нажата и меняет переменную filter на значение нажатой кнопки фильтрации
     const filterTasks = (todoListID:string,filterValue: FilterTypes) =>{
-        todoLists.forEach(t => {
-            if(t.id === todoListID){
-                t.filter = filterValue
-                setTodoLists([...todoLists])
-            }
-        })
+        let todoList:any = todoLists.find(t => t.id === todoListID )
+        if(todoList){
+            todoList.filter = filterValue
+            setTodoLists([...todoLists])
+        }
     }
 
     // функция удоляет таску при нажатие на кнопку удоления
@@ -78,23 +71,46 @@ function App() {
 
     }
 
+    // удоляем Todo list
+    const removeTodoList = (todoListID:string)=>{
+        const withoutRemoteTodoLists = todoLists.filter(t => t.id!==todoListID)
+        setTodoLists([...withoutRemoteTodoLists])
+    }
 
+    const addTodoList = ()=>{
+        todoLists.push({id: v1(), title: " ", filter: "all", tasks: []})
+        let withAddedTodoList = todoLists
+        setTodoLists([...withAddedTodoList])
+    }
 
     // возвращаем кампаненту App и в ней списки тасков
     return (
         <div className="App">
+            <form>
+                <input></input>
+                <button type={"button"} onClick={addTodoList}>+</button>
+            </form>
 
             {
-                todoLists.map(t =>{
+                todoLists.map(todoList => {
+                    let filteredTodoList = todoList.tasks
+                    if (todoList.filter === "active") {
+                        filteredTodoList = todoList.tasks.filter(t => !t.isDone)
+                    } else if (todoList.filter === "completed") {
+                        filteredTodoList = todoList.tasks.filter(t => t.isDone)
+                    }
+
                     return <TodoList
-                            key={t.id}
-                            todoListID={t.id}
-                            title={t.title}
-                            tasks={t.tasks}
-                            removeTask={removeTask}
-                            filterTasks={filterTasks}
-                            addNewTask={addNewTask}
-                            onChangeStatus={changeStatus}
+                        key={todoList.id}
+                        todoListID={todoList.id}
+                        title={todoList.title}
+                        tasks={filteredTodoList}
+                        removeTask={removeTask}
+                        filterTasks={filterTasks}
+                        addNewTask={addNewTask}
+                        onChangeStatus={changeStatus}
+                        removeTodoList={removeTodoList}
+
                     />
                 })
 

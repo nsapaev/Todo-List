@@ -25,6 +25,8 @@ type PropsType = {
     addNewTask: (todoListID: string, taskTitle: string) => void
     onChangeStatus: (todoListsID: string, taskID: string) => void
     todoListID: string
+    removeTodoList:(todoListID:string)=>void
+
 }
 
 
@@ -60,11 +62,14 @@ export const TodoList = (props: PropsType) => {
     const handlerChangeStatus = (todoListID: string, taskID: string) => {
         props.onChangeStatus(todoListID, taskID)
     }
+    const handlerRemoveTodoList =(todoListID:string)=>{
+        props.removeTodoList(todoListID)
+    }
 
 
     return (
         <div className={style.todoList}>
-            <h1 className={style.todoList__title}>{props.title}</h1>
+            <h1 className={style.todoList__title}>{props.title}  <IconButton onClick={() => {handlerRemoveTodoList(props.todoListID)}} aria-label="delete"><DeleteIcon/></IconButton></h1>
             <div className={style.todoList__container}>
                 <div className={style.listInput}>
                     <div className={error ? style.todoList__inputTitle : ""}>
