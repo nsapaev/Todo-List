@@ -7,6 +7,8 @@ import React, {useState} from "react";
 import {FilterTypes} from "../../App";
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import {TodoListTitle} from "./todoListTitle/TodoListTitle";
+import {TodoTasksTitle} from "./todoTasksTitle/TodoTasksTitle";
 
 
 // тип тасков
@@ -14,23 +16,31 @@ export type TasksType = {
     id: string,
     title: string,
     isDone: boolean,
+    editMode:false
 }
 
 // тип приходящих пропсов
 type PropsType = {
     title: string,
-    tasks: Array<TasksType>,
+    tasks: any,
     removeTask: (todoListID: string, taskID: string) => void
     filterTasks: (todoListID: string, filterValue: FilterTypes) => void,
     addNewTask: (todoListID: string, taskTitle: string) => void
     onChangeStatus: (todoListsID: string, taskID: string) => void
     todoListID: string
     removeTodoList:(todoListID:string)=>void
+    activateEditMode:(todoListID:string)=>void
+    editTitleMode:boolean
+    deactivateEditMode:(todoListID:string,newTitle:string)=>void
+    editModeTaskTitle:boolean
+    activateTaskTitleEditMode:(todoTaskID:string) => void
+    deActivateTaskTitleEditMode:(todoTaskID:string,newTitle:string)=>void
 
 }
 
 
 export const TodoList = (props: PropsType) => {
+
     let [error, setError] = useState(false)
     let [newTaskInputValue, setNewTaskInputValue] = useState("")
     const handlerChangeNewTaskInputValue = (e: any) => {
@@ -41,6 +51,7 @@ export const TodoList = (props: PropsType) => {
         props.removeTask(todoListID, taskID)
     }
     const handlerFilterTask = (todoListID: string, value: FilterTypes) => {
+        setActiveButton(value)
         props.filterTasks(todoListID, value)
     }
     const handlerAddNewTask = (todoListID: string) => {
@@ -67,9 +78,37 @@ export const TodoList = (props: PropsType) => {
     }
 
 
+    const handlerActivateEditMode = (todoListID:string) =>{
+        props.activateEditMode(todoListID)
+    }
+
+
+    let [titleInputValue, setTitleInputValue] = useState(props.title)
+    const handlerChangeTitleInputValue= (e:any) =>{
+        setTitleInputValue(e.currentTarget.value)
+    }
+    const deactivateEditMode = (todoListID:string) =>{
+        if(titleInputValue.trim()) props.deactivateEditMode(todoListID,titleInputValue.trim())
+
+    }
+
+    let [activeButton, setActiveButton] = useState("all")
+
     return (
         <div className={style.todoList}>
-            <h1 className={style.todoList__title}>{props.title}  <IconButton onClick={() => {handlerRemoveTodoList(props.todoListID)}} aria-label="delete"><DeleteIcon/></IconButton></h1>
+
+                    <TodoListTitle
+                        editModeTaskTitle={props.editModeTaskTitle}
+                        editTitleMode={props.editTitleMode}
+                        handlerActivateEditMode={handlerActivateEditMode}
+                        titleInputValue={titleInputValue}
+                        handlerChangeTitleInputValue={handlerChangeTitleInputValue}
+                        deactivateEditMode={deactivateEditMode}
+                        title={props.title}
+                        todoListID={props.todoListID}
+                        handlerRemoveTodoList={handlerRemoveTodoList}
+                    />
+
             <div className={style.todoList__container}>
                 <div className={style.listInput}>
                     <div className={error ? style.todoList__inputTitle : ""}>
@@ -87,35 +126,24 @@ export const TodoList = (props: PropsType) => {
                     {error ? <h5 className={style.errorMessage}>Field is Required</h5> : null}
                 </div>
                 <ul className={style.checkboxItems}>
-                    {
-                        props.tasks.map(t => {
-                            return (
-                                <>
-                                    <li key={t.id}>
-                                        <Checkbox checked={t.isDone} onChange={() => {
-                                            handlerChangeStatus(props.todoListID, t.id)
-                                        }}/><label>{t.title}</label>
-                                        <IconButton onClick={() => {
-                                            handlerRemoveTask(props.todoListID, t.id)
-                                        }} aria-label="delete">
-                                            <DeleteIcon/>
-                                        </IconButton>
-                                    </li>
-
-                                </>
-                            )
-                        })
-                    }
-
+                    <TodoTasksTitle
+                        tasks={props.tasks}
+                        handlerRemoveTask={handlerRemoveTask}
+                        handlerChangeStatus={handlerChangeStatus}
+                        todoListID={props.todoListID}
+                        activateTaskTitleEditMode={props.activateTaskTitleEditMode}
+                        deActivateTaskTitleEditMode={props.deActivateTaskTitleEditMode}
+                        editMode={props.editModeTaskTitle}
+                    />
                 </ul>
                 <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                    <Button className={"btn"} onClick={() => {
+                    <Button className={"btn"} color={activeButton === "all"?"secondary":"primary"} onClick={() => {
                         handlerFilterTask(props.todoListID, "all")
                     }}>All</Button>
-                    <Button onClick={() => {
+                    <Button color={activeButton === "active"?"secondary":"primary"}  onClick={() => {
                         handlerFilterTask(props.todoListID, "active")
                     }}>Active</Button>
-                    <Button onClick={() => {
+                    <Button color={activeButton === "completed"?"secondary":"primary"} onClick={() => {
                         handlerFilterTask(props.todoListID, "completed")
                     }}>Completed </Button>
                 </ButtonGroup>

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {TasksType, TodoList} from "./Components/todoList/TodoList";
 import {v1} from "uuid";
+import {AddNewTodoListForm} from "./Components/addNewTodoListForm/AddNewTodoListForm";
 
 
 // тип фильтрации
@@ -12,17 +13,12 @@ function App() {
 
     // создоём стейт который хранит массив из списков
     const [todoLists, setTodoLists] = useState([
-        {id: v1(), title: "what to learn", filter: "all", tasks: [
-                {id: v1(), title: "js", isDone: false},
-                {id: v1(), title: "php", isDone: true},
-                {id: v1(), title: "css", isDone: false},]},
-        {id: v1(), title: "What to buy", filter: "all", tasks: [{id: v1(), title: "Milk", isDone: false},
-                {id: v1(), title: "Banana", isDone: true},
-                {id: v1(), title: "Egg", isDone: false},]},
+        {id: v1(), title: "what to learn", editTitleMode:false, filter: "all", tasks: [
+                {id: v1(), title: "js",  isDone: false, editMode:false},]},
+        {id: v1(), title: "What to buy", editTitleMode:false,  filter: "all", tasks: [{id: v1(), title: "Milk", isDone: false,editMode:false},
+                {id: v1(), title: "Banana",  isDone: true, editMode:false},
+                ]},
     ])
-
-
-
     // функция говорит какая кнопка фильтрации была нажата и меняет переменную filter на значение нажатой кнопки фильтрации
     const filterTasks = (todoListID:string,filterValue: FilterTypes) =>{
         let todoList:any = todoLists.find(t => t.id === todoListID )
@@ -31,7 +27,6 @@ function App() {
             setTodoLists([...todoLists])
         }
     }
-
     // функция удоляет таску при нажатие на кнопку удоления
     let removeTask = (todoListID:string,taskID: string): void => {
         todoLists.forEach(t => {
@@ -42,12 +37,11 @@ function App() {
         })
 
     }
-
     // функция добовляет новую таску в список тасок
     const addNewTask = (todoListID:string, newTaskTitle: string): void => {
         todoLists.forEach(t =>{
             if(t.id === todoListID){
-                let newTask = {id: v1(), title: newTaskTitle, isDone: false}
+                let newTask = {id: v1(), title: newTaskTitle, isDone: false,editMode:false}
                 t.tasks.push(newTask)
                 setTodoLists([...todoLists])
             }
@@ -70,27 +64,61 @@ function App() {
         })
 
     }
-
     // удоляем Todo list
     const removeTodoList = (todoListID:string)=>{
         const withoutRemoteTodoLists = todoLists.filter(t => t.id!==todoListID)
         setTodoLists([...withoutRemoteTodoLists])
     }
+    const addTodoList = (title:string)=>{
+        todoLists.push({id: v1(), title: title, editTitleMode:false, filter: "all", tasks: []})
+        setTodoLists([...todoLists])
+    }
+    let [editMode, setEditMode] = useState(false)
+    const activateEditMode = (todoListID:string) =>{
+        todoLists.forEach(t =>{
+            if(t.id === todoListID){
+                t.editTitleMode = true
+                setTodoLists([...todoLists])
+            }
+        })
+    }
+    const deactivateEditMode = (todoListID:string, newTitle:string):void=>{
+        todoLists.forEach(t =>{
+            if(t.id === todoListID){
+                t.editTitleMode = false
+                t.title = newTitle
+                setTodoLists([...todoLists])
+            }
+        })
+    }
 
-    const addTodoList = ()=>{
-        todoLists.push({id: v1(), title: " ", filter: "all", tasks: []})
-        let withAddedTodoList = todoLists
-        setTodoLists([...withAddedTodoList])
+    let [editModeTaskTitle, setEditModeTaskTitle] = useState(false)
+    const activateTaskTitleEditMode = (taskTitleID:string) =>{
+        todoLists.forEach(list => {
+            list.tasks.forEach(t =>{
+                if(t.id == taskTitleID){
+                    t.editMode = true
+                    setTodoLists([...todoLists])
+                }
+            })
+        })
+    }
+    const deActivateTaskTitleEditMode = (taskTitleID:string,newTitle:string) =>{
+        todoLists.forEach(list => {
+            list.tasks.forEach(t =>{
+                if(t.id == taskTitleID){
+                    t.editMode = false
+                    t.title = newTitle
+                    setTodoLists([...todoLists])
+                }
+            })
+        })
     }
 
     // возвращаем кампаненту App и в ней списки тасков
     return (
         <div className="App">
-            <form>
-                <input></input>
-                <button type={"button"} onClick={addTodoList}>+</button>
-            </form>
-
+            <AddNewTodoListForm addTodoList={addTodoList}/>
             {
                 todoLists.map(todoList => {
                     let filteredTodoList = todoList.tasks
@@ -110,7 +138,12 @@ function App() {
                         addNewTask={addNewTask}
                         onChangeStatus={changeStatus}
                         removeTodoList={removeTodoList}
-
+                        activateEditMode={activateEditMode}
+                        editTitleMode={todoList.editTitleMode}
+                        deactivateEditMode={deactivateEditMode}
+                        editModeTaskTitle={editModeTaskTitle}
+                        activateTaskTitleEditMode={activateTaskTitleEditMode}
+                        deActivateTaskTitleEditMode={deActivateTaskTitleEditMode}
                     />
                 })
 
