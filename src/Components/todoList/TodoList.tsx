@@ -5,8 +5,6 @@ import Checkbox from '@mui/material/Checkbox';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import React, {useState} from "react";
 import {FilterTypes} from "../../App";
-import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
 import {TodoListTitle} from "./todoListTitle/TodoListTitle";
 import {TodoTasksTitle} from "./todoTasksTitle/TodoTasksTitle";
 
@@ -113,16 +111,19 @@ export const TodoList = (props: PropsType) => {
                 <div className={style.listInput}>
                     <div className={error ? style.todoList__inputTitle : ""}>
                         <TextField id="outlined-basic"
+                                   size={"small"}
                                    variant="outlined"
                                    value={newTaskInputValue}
                                    onKeyPress={(e) => {
                                        handlerKeyPress(e, props.todoListID)
                                    }}
-                                   onChange={handlerChangeNewTaskInputValue}/>
+                                   onChange={handlerChangeNewTaskInputValue}
+                        />
+                        <Button variant="contained" size="small" onClick={() => {
+                            handlerAddNewTask(props.todoListID)
+                        }}>+</Button>
                     </div>
-                    <Button variant="contained" size="small" onClick={() => {
-                        handlerAddNewTask(props.todoListID)
-                    }}>+</Button>
+
                     {error ? <h5 className={style.errorMessage}>Field is Required</h5> : null}
                 </div>
                 <ul className={style.checkboxItems}>

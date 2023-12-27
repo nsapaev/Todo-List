@@ -36,8 +36,11 @@ export const AddNewTodoListForm = (props:any) => {
     }
     return (
         <form>
-            <TextField id="standard-basic" label={error?"Todo Title is Require":"List Title"} onKeyPress={handleAddNewTodoListOnKeyPress} variant="standard" onChange={handleChangeInputValue} value={inputValue}/>
-            <Button type={"button"} variant="outlined" size="medium" onClick={() => {handleAddNewTodoList()}}>Add Todo List</Button>
+            <TextField id="standard-basic" label={error?"Todo Title is Require":"Add Todo List "} onKeyPress={handleAddNewTodoListOnKeyPress} variant="standard" onChange={handleChangeInputValue} value={inputValue}/>
+            <Button type={"button"} variant="contained" size="small" onClick={() => {handleAddNewTodoList()}}>Add Todo List</Button>
+                <br/>
+                <br/>
+                <br/>
         </form>
     )
 }
