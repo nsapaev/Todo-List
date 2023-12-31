@@ -1,7 +1,6 @@
 
 .listInput{}
 .todoList{
-    padding: 20px;
     display: inline-block;
 }
 .todoList__container{
@@ -15,8 +14,7 @@
 .buttonGroup{
     display: inline-block;
 }
-.todoList__title{
-}
+
 
 .todoList__inputTitle{
     border: 2px solid red;
@@ -25,7 +23,36 @@
 .errorMessage{
     color:red;
 }
-Button.btn{
-    color:red;
-    background: green;
+.Button{
+    display: flex;
+    align-items:center;
+    gap: 10px;
+    outline: none;
+    border: none;
+    font-size: 16px;
+    font-family: sans-serif;
+    color:gray;
+    position: absolute;
+    right: -30px;
+    top: -10px;
+}
+
+.todoList__title{
+    position: relative;
+    font-size: 20px;
+}
+
+.filterBtn{
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    padding: 5px 10px;
+    color:rgba(0, 0, 0, 0.8);
+    font-size: 15px;
+    display: inline-block;
+    cursor: pointer;
+}
+.filterBtnGroup{
+    display: flex;
+    align-items: center;
 }

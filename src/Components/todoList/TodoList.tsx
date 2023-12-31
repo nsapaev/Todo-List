@@ -1,14 +1,10 @@
 import style from "./todoList.module.css"
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Checkbox from '@mui/material/Checkbox';
-import ButtonGroup from '@mui/material/ButtonGroup';
+import {Button} from '@radix-ui/themes';
 import React, {useState} from "react";
 import {FilterTypes} from "../../App";
-import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
 import {TodoListTitle} from "./todoListTitle/TodoListTitle";
 import {TodoTasksTitle} from "./todoTasksTitle/TodoTasksTitle";
+import {TextField} from "@radix-ui/themes";
 
 
 // тип тасков
@@ -16,7 +12,7 @@ export type TasksType = {
     id: string,
     title: string,
     isDone: boolean,
-    editMode:false
+    editMode: false
 }
 
 // тип приходящих пропсов
@@ -28,13 +24,13 @@ type PropsType = {
     addNewTask: (todoListID: string, taskTitle: string) => void
     onChangeStatus: (todoListsID: string, taskID: string) => void
     todoListID: string
-    removeTodoList:(todoListID:string)=>void
-    activateEditMode:(todoListID:string)=>void
-    editTitleMode:boolean
-    deactivateEditMode:(todoListID:string,newTitle:string)=>void
-    editModeTaskTitle:boolean
-    activateTaskTitleEditMode:(todoTaskID:string) => void
-    deActivateTaskTitleEditMode:(todoTaskID:string,newTitle:string)=>void
+    removeTodoList: (todoListID: string) => void
+    activateEditMode: (todoListID: string) => void
+    editTitleMode: boolean
+    deactivateEditMode: (todoListID: string, newTitle: string) => void
+    editModeTaskTitle: boolean
+    activateTaskTitleEditMode: (todoTaskID: string) => void
+    deActivateTaskTitleEditMode: (todoTaskID: string, newTitle: string) => void
 
 }
 
@@ -73,80 +69,105 @@ export const TodoList = (props: PropsType) => {
     const handlerChangeStatus = (todoListID: string, taskID: string) => {
         props.onChangeStatus(todoListID, taskID)
     }
-    const handlerRemoveTodoList =(todoListID:string)=>{
+    const handlerRemoveTodoList = (todoListID: string) => {
         props.removeTodoList(todoListID)
     }
 
 
-    const handlerActivateEditMode = (todoListID:string) =>{
+    const handlerActivateEditMode = (todoListID: string) => {
         props.activateEditMode(todoListID)
     }
 
 
     let [titleInputValue, setTitleInputValue] = useState(props.title)
-    const handlerChangeTitleInputValue= (e:any) =>{
+    const handlerChangeTitleInputValue = (e: any) => {
         setTitleInputValue(e.currentTarget.value)
     }
-    const deactivateEditMode = (todoListID:string) =>{
-        if(titleInputValue.trim()) props.deactivateEditMode(todoListID,titleInputValue.trim())
+    const deactivateEditMode = (todoListID: string) => {
+        if (titleInputValue.trim()) props.deactivateEditMode(todoListID, titleInputValue.trim())
 
     }
 
     let [activeButton, setActiveButton] = useState("all")
 
     return (
-        <div className={style.todoList}>
+        <div className={"todoListContainer"}>
+            <div className={style.todoList}>
 
-                    <TodoListTitle
-                        editModeTaskTitle={props.editModeTaskTitle}
-                        editTitleMode={props.editTitleMode}
-                        handlerActivateEditMode={handlerActivateEditMode}
-                        titleInputValue={titleInputValue}
-                        handlerChangeTitleInputValue={handlerChangeTitleInputValue}
-                        deactivateEditMode={deactivateEditMode}
-                        title={props.title}
-                        todoListID={props.todoListID}
-                        handlerRemoveTodoList={handlerRemoveTodoList}
-                    />
+                <TodoListTitle
+                    editModeTaskTitle={props.editModeTaskTitle}
+                    editTitleMode={props.editTitleMode}
+                    handlerActivateEditMode={handlerActivateEditMode}
+                    titleInputValue={titleInputValue}
+                    handlerChangeTitleInputValue={handlerChangeTitleInputValue}
+                    deactivateEditMode={deactivateEditMode}
+                    title={props.title}
+                    todoListID={props.todoListID}
+                    handlerRemoveTodoList={handlerRemoveTodoList}
+                />
 
-            <div className={style.todoList__container}>
-                <div className={style.listInput}>
-                    <div className={error ? style.todoList__inputTitle : ""}>
-                        <TextField id="outlined-basic"
-                                   variant="outlined"
-                                   value={newTaskInputValue}
-                                   onKeyPress={(e) => {
-                                       handlerKeyPress(e, props.todoListID)
-                                   }}
-                                   onChange={handlerChangeNewTaskInputValue}/>
+                <div className={style.todoList__container}>
+                    <div className={style.listInput}>
+                        <div style={{display: "inline-block"}} className={error ? style.todoList__inputTitle : ""}>
+                            <TextField.Input
+                                placeholder="Add tasks"
+                                value={newTaskInputValue}
+                                style={{
+                                    border: "none",
+                                    padding: "5px 10px",
+                                    borderBottom: "1px solid rgba(0, 0, 0, 0.8)",
+                                    background: "none"
+                                }}
+                                onKeyPress={(e) => {
+                                    handlerKeyPress(e, props.todoListID)
+                                }}
+                                onChange={handlerChangeNewTaskInputValue}
+                            />
+
+                        </div>
+                        <Button onClick={() => {
+                            handlerAddNewTask(props.todoListID)}}
+                            style={{border:"none", padding:"5px 15px",background:"#F2E2FC" }}
+                        >
+                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M8 2.75C8 2.47386 7.77614 2.25 7.5 2.25C7.22386 2.25 7 2.47386 7 2.75V7H2.75C2.47386 7 2.25 7.22386 2.25 7.5C2.25 7.77614 2.47386 8 2.75 8H7V12.25C7 12.5261 7.22386 12.75 7.5 12.75C7.77614 12.75 8 12.5261 8 12.25V8H12.25C12.5261 8 12.75 7.77614 12.75 7.5C12.75 7.22386 12.5261 7 12.25 7H8V2.75Z"
+                                    fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path>
+                            </svg>
+                        </Button>
+                        {error ? <h5 className={style.errorMessage}>Field is Required</h5> : null}
                     </div>
-                    <Button variant="contained" size="small" onClick={() => {
-                        handlerAddNewTask(props.todoListID)
-                    }}>+</Button>
-                    {error ? <h5 className={style.errorMessage}>Field is Required</h5> : null}
+                    <ul className={style.checkboxItems}>
+                        <TodoTasksTitle
+                            tasks={props.tasks}
+                            handlerRemoveTask={handlerRemoveTask}
+                            handlerChangeStatus={handlerChangeStatus}
+                            todoListID={props.todoListID}
+                            activateTaskTitleEditMode={props.activateTaskTitleEditMode}
+                            deActivateTaskTitleEditMode={props.deActivateTaskTitleEditMode}
+                            editMode={props.editModeTaskTitle}
+                        />
+                    </ul>
+
+                    <div className={style.filterBtnGroup}>
+                        <Button className={style.filterBtn}
+                                style={{background: activeButton === "all" ? "#F2E2FC" : "inherit"}}
+                                onClick={() => {
+                                    handlerFilterTask(props.todoListID, "all")
+                                }}>All</Button>
+                        <Button className={style.filterBtn}
+                                style={{background: activeButton === "active" ? "#F2E2FC" : "inherit"}} onClick={() => {
+                            handlerFilterTask(props.todoListID, "active")
+                        }}>Active</Button>
+                        <Button className={style.filterBtn} variant="soft"
+                                style={{background: activeButton === "completed" ? "#F2E2FC" : "inherit"}}
+                                onClick={() => {
+                                    handlerFilterTask(props.todoListID, "completed")
+                                }}>Completed </Button>
+                    </div>
+
                 </div>
-                <ul className={style.checkboxItems}>
-                    <TodoTasksTitle
-                        tasks={props.tasks}
-                        handlerRemoveTask={handlerRemoveTask}
-                        handlerChangeStatus={handlerChangeStatus}
-                        todoListID={props.todoListID}
-                        activateTaskTitleEditMode={props.activateTaskTitleEditMode}
-                        deActivateTaskTitleEditMode={props.deActivateTaskTitleEditMode}
-                        editMode={props.editModeTaskTitle}
-                    />
-                </ul>
-                <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                    <Button className={"btn"} color={activeButton === "all"?"secondary":"primary"} onClick={() => {
-                        handlerFilterTask(props.todoListID, "all")
-                    }}>All</Button>
-                    <Button color={activeButton === "active"?"secondary":"primary"}  onClick={() => {
-                        handlerFilterTask(props.todoListID, "active")
-                    }}>Active</Button>
-                    <Button color={activeButton === "completed"?"secondary":"primary"} onClick={() => {
-                        handlerFilterTask(props.todoListID, "completed")
-                    }}>Completed </Button>
-                </ButtonGroup>
             </div>
         </div>
     )

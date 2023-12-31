@@ -1,6 +1,9 @@
 * {
     margin: 0;
     padding: 0;
+    outline: none;
+    color: rgba(0, 0, 0, 0.8);
+    box-sizing: border-box;
 }
 
 li, a {
@@ -9,4 +12,31 @@ li, a {
 
 ol, ul {
     list-style: none;
+}
+body{
+    background: #F2E2FC;
+}
+
+.App{
+
+    align-items: start;
+}
+
+.todoListContainer{
+    background: whitesmoke;
+    width: 300px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 38px 9px rgba(34, 60, 80, 0.2);
+    overflow: hidden;
+    padding: 15px 15px;
+    height: 100%;
+    display: inline-block;
+}
+
+.App__container{
+    display: flex;
+    flex-wrap: nowrap;
+    flex: 1 0 300px;
+    gap: 30px;
+
 }

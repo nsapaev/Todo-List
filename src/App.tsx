@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useReducer, useState} from 'react';
 import './App.css';
-import {TasksType, TodoList} from "./Components/todoList/TodoList";
+import {TodoList} from "./Components/todoList/TodoList";
 import {v1} from "uuid";
 import {AddNewTodoListForm} from "./Components/addNewTodoListForm/AddNewTodoListForm";
 
@@ -10,14 +10,12 @@ export  type FilterTypes = "all" | "completed" | "active"
 
 function App() {
 
-
+    
     // создоём стейт который хранит массив из списков
     const [todoLists, setTodoLists] = useState([
-        {id: v1(), title: "what to learn", editTitleMode:false, filter: "all", tasks: [
-                {id: v1(), title: "js",  isDone: false, editMode:false},]},
-        {id: v1(), title: "What to buy", editTitleMode:false,  filter: "all", tasks: [{id: v1(), title: "Milk", isDone: false,editMode:false},
-                {id: v1(), title: "Banana",  isDone: true, editMode:false},
-                ]},
+        {id: v1(), title: "", editTitleMode:false, filter: "all", tasks: [
+                {id: v1(), title: "js",  isDone: false, editMode:false},]}
+
     ])
     // функция говорит какая кнопка фильтрации была нажата и меняет переменную filter на значение нажатой кнопки фильтрации
     const filterTasks = (todoListID:string,filterValue: FilterTypes) =>{
@@ -103,8 +101,7 @@ function App() {
             })
         })
     }
-    const deActivateTaskTitleEditMode = (taskTitleID:string,newTitle:string) =>{
-        todoLists.forEach(list => {
+    const deActivateTaskTitleEditMode = (taskTitleID:string,newTitle:string) =>{todoLists.forEach(list => {
             list.tasks.forEach(t =>{
                 if(t.id == taskTitleID){
                     t.editMode = false
@@ -119,39 +116,50 @@ function App() {
     return (
         <div className="App">
             <AddNewTodoListForm addTodoList={addTodoList}/>
-            {
-                todoLists.map(todoList => {
-                    let filteredTodoList = todoList.tasks
-                    if (todoList.filter === "active") {
-                        filteredTodoList = todoList.tasks.filter(t => !t.isDone)
-                    } else if (todoList.filter === "completed") {
-                        filteredTodoList = todoList.tasks.filter(t => t.isDone)
-                    }
 
-                    return <TodoList
-                        key={todoList.id}
-                        todoListID={todoList.id}
-                        title={todoList.title}
-                        tasks={filteredTodoList}
-                        removeTask={removeTask}
-                        filterTasks={filterTasks}
-                        addNewTask={addNewTask}
-                        onChangeStatus={changeStatus}
-                        removeTodoList={removeTodoList}
-                        activateEditMode={activateEditMode}
-                        editTitleMode={todoList.editTitleMode}
-                        deactivateEditMode={deactivateEditMode}
-                        editModeTaskTitle={editModeTaskTitle}
-                        activateTaskTitleEditMode={activateTaskTitleEditMode}
-                        deActivateTaskTitleEditMode={deActivateTaskTitleEditMode}
-                    />
-                })
 
-            }
+                <div className={"App__container"}>
+                {
+                    todoLists.map(todoList => {
+                        let filteredTodoList = todoList.tasks
+                        if (todoList.filter === "active") {
+                            filteredTodoList = todoList.tasks.filter(t => !t.isDone)
+                        } else if (todoList.filter === "completed") {
+                            filteredTodoList = todoList.tasks.filter(t => t.isDone)
+                        }
+                        if(todoList.title){
+                            return <TodoList
+                                key={todoList.id}
+                                todoListID={todoList.id}
+                                title={todoList.title}
+                                tasks={filteredTodoList}
+                                removeTask={removeTask}
+                                filterTasks={filterTasks}
+                                addNewTask={addNewTask}
+                                onChangeStatus={changeStatus}
+                                removeTodoList={removeTodoList}
+                                activateEditMode={activateEditMode}
+                                editTitleMode={todoList.editTitleMode}
+                                deactivateEditMode={deactivateEditMode}
+                                editModeTaskTitle={editModeTaskTitle}
+                                activateTaskTitleEditMode={activateTaskTitleEditMode}
+                                deActivateTaskTitleEditMode={deActivateTaskTitleEditMode}
+                            />
+                        }
 
+
+                    })
+
+                }
+
+                </div>
 
         </div>
     );
 }
 
 export default App;
+
+
+
+
