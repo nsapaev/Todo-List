@@ -2,3 +2,34 @@
     color: red;
     border: 1px solid red;
 }
+
+.header{
+    height: 80px;
+    background: whitesmoke;
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+.header__container{
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.header__container Form{
+    display: flex;
+    gap: 15px;
+
+}
+.TextInput{
+    padding: 10px;
+    font-size: 18px;
+}
+.TextInputError{
+    padding: 10px;
+    font-size: 18px;
+    border:1px solid red;
+
+}
+.TextInputError::placeholder{
+    color: red;
+    opacity: 0.5;
+}

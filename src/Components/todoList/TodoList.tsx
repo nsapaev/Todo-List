@@ -127,7 +127,7 @@ export const TodoList = (props: PropsType) => {
                         </div>
                         <Button onClick={() => {
                             handlerAddNewTask(props.todoListID)}}
-                            style={{border:"none", padding:"5px 15px",background:"#F2E2FC" }}
+                            style={{border:"none", padding:"5px 15px",background:"#F2E2FC",cursor:"pointer"}}
                         >
                             <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
@@ -138,7 +138,7 @@ export const TodoList = (props: PropsType) => {
                         </Button>
                         {error ? <h5 className={style.errorMessage}>Field is Required</h5> : null}
                     </div>
-                    <ul className={style.checkboxItems}>
+                    <ul style={{marginBottom:"25px"}} className={style.checkboxItems}>
                         <TodoTasksTitle
                             tasks={props.tasks}
                             handlerRemoveTask={handlerRemoveTask}

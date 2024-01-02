@@ -35,11 +35,13 @@
     position: absolute;
     right: -30px;
     top: -10px;
+    cursor: pointer;
 }
 
 .todoList__title{
     position: relative;
     font-size: 20px;
+    margin-bottom: 15px;
 }
 
 .filterBtn{

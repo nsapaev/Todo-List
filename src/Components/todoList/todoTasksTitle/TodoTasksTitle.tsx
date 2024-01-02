@@ -13,7 +13,16 @@ export const TodoTasksTitle = (props: any) => {
         setInputValue(title)
     }
     const deactivateEditMode = (id: string) => {
-        props.deActivateTaskTitleEditMode(id, inputValue)
+        if(inputValue.trim()){
+            props.deActivateTaskTitleEditMode(id, inputValue)
+        }
+
+    }
+
+    const deactivateEditModeOnKeyPress = (id:string,e:any)=>{
+        if(inputValue.trim() && e.charCode === 13){
+            props.deActivateTaskTitleEditMode(id, inputValue)
+        }
     }
 
     const changeInputTitleValue = (e: any) => {
@@ -30,23 +39,29 @@ export const TodoTasksTitle = (props: any) => {
                             <li key={t.id}>
 
                                 <div
-                                    style={{display: "flex", justifyContent: "space-between"}}>
+                                    style={{display: "flex", justifyContent: "space-between"} }>
                                    <div>
                                        <Checkbox
                                            checked={t.isDone}
                                            onChange={() => {
                                                props.handlerChangeStatus(props.todoListID, t.id)
-                                           }}/>
+                                           }}
+                                       />
 
                                        {
                                            !t.editMode &&
                                            <label
                                                onDoubleClick={() => activateEditMode(t.id, t.title)}>{t.title}</label> ||
                                            t.editMode &&
-                                           <input autoFocus value={inputValue} onChange={changeInputTitleValue}
+                                           <input autoFocus
+                                                  value={inputValue}
+                                                  onChange={changeInputTitleValue}
                                                   onBlur={() => {
                                                       deactivateEditMode(t.id)
-                                                  }}/>
+                                                  }}
+                                                  onKeyPress={(e)=>{ deactivateEditModeOnKeyPress(t.id,e)}}
+                                           />
+
                                        }
                                    </div>
 
